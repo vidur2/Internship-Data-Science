@@ -19,6 +19,17 @@ def plotBarChart(table, row):
 
 def main():
     data, isSuccess = readCSV('/Users/vidurmodgil/Desktop/DATA/Internship/Internship-Data/VIDURSAMPLE.csv')
+    allKeys = data.keys()
+    discreetKeys = []
+    continiousKeys = []
+    for key in allKeys:
+        dataSet = data[key]
+        dataSet.sort()
+        dataSet = set(dataSet)
+        if dataSet[1] - dataSet[0] == 1:
+            discreetKeys.append(key)
+        else:
+            continiousKeys.append(key)
     plotBarChart(data,'AGE')
     plt.show()
 if __name__ == '__main__':
