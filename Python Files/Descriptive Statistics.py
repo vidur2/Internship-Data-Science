@@ -9,7 +9,7 @@ from Commands import *
 from DescriptiveAnalysisCommands import *
 
 def main():
-    data, isSuccess = readCSV('/Users/vidurmodgil/Desktop/DATA/Internship/Internship-Data/VIDURSAMPLE.csv')    #Enter your filepath here
+    data, isSuccess = readCSV('**ENTER FILEPATH TO CSV HERE**')
     pandas.DataFrame.from_dict(data)
     variables = list(data.keys())
     variables.remove('MATCHKEY')
