@@ -1,6 +1,7 @@
 '''
-Internship Day 1
-Age Variable
+Descriptive Statistics
+Vidur Modgil
+Internship
 '''
 
 #Imports
