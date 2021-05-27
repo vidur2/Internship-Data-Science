@@ -27,7 +27,7 @@ def readCSV(filepath):
         for rows in csvList:
             iterator = 0
             for elements in rows:
-                storedInformation[headers[iterator]].append(elements)
+                storedInformation[headers[iterator]].append(float(elements))
                 iterator = iterator + 1
         return storedInformation, True
     else:
