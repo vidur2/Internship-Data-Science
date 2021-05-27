@@ -38,11 +38,14 @@ def frequencyDist(table, rowName, possibleValues):
     freq = dict()
     for i in possibleValues:
         counter = 0
+        newInformation = []
         for element in table[rowName]:
             if float(i) == float(element):
                 counter = counter + 1
-        freq[i] = counter
+        newInformation.append(counter)
+        freq[i] = newInformation
     return freq
+
 
 def gatherSet(table, rowName):
     returnSet = set()

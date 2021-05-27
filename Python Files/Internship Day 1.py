@@ -13,9 +13,8 @@ def main():
     delqid = data['goodbad']
     freq = []
     possibleData = gatherSet(data, 'DELQID')
-    print(possibleData)
     getFreq = frequencyDist(data, 'DELQID', possibleData)
-    print(getFreq)
-
+    df = pandas.DataFrame.from_dict(getFreq)
+    
 if __name__ == '__main__':
     main()
