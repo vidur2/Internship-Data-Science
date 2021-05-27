@@ -26,7 +26,12 @@ def main():
         dataSet = data[key]
         dataSet.sort()
         dataSet = set(dataSet)
-        if dataSet[1] - dataSet[0] == 1 and dataSet[2] - dataSet[1] == 1:
+        check = True
+        for element in dataSet:
+            if int(element) != element:
+                check = False
+                break
+        if check == True:
             discreetKeys.append(key)
         else:
             continiousKeys.append(key)
