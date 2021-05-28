@@ -2,7 +2,9 @@
 File for commands for finding parts of data set such as mean median mode
 Vidur Modgil
 '''
-
+# Basic Imports
+from Commands import *
+from matplotlib import pyplot as plt
 # Function to find median given table and row name
 def getMedian(table, row):
     # Creates a pointer to a specific row
