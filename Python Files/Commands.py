@@ -53,7 +53,7 @@ def frequencyDist(table, rowName, possibleValues):
         freq[i] = newInformation
         enterableFrequency.append(newInformation)
     # Plots table using matplotlib
-    freqTable = plt.table(enterableFrequency, loc=9, colLabels=['Frequency'], rowLabels=list(possibleValues))
+    freqTable = plt.table(enterableFrequency, loc=9, colLabels=['Frequency'], rowLabels=list(possibleValues), cellLoc='center')
     freqTable.auto_set_font_size(False)
     freqTable.set_fontsize(8)
     freqTable.scale(0.5, 1)

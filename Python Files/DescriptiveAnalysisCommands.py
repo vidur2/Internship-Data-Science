@@ -59,3 +59,47 @@ def standardDeviation(table, row):
     
     # Calculates and returns standard deviation through a calc of mean and sqrt
     return (sum(deviations)/len(deviations))**0.5
+
+# General function to plot descriptive statistics in a table
+def descriptiveDataGraphing(columnNames):
+    # Reads in file
+    data, isSuccess = readCSV('/Users/vidurmodgil/Desktop/DATA/Internship/Internship-Data/VIDURSAMPLE.csv')
+    
+    # Initializes empty list
+    listOfStatistics = []
+
+    # Iterates through entered column names
+    for row in columnNames:
+        # Gets median and casts it to string
+        median = str(getMedian(data, row))
+
+        # Mean value is found, and rounded to 4 decimal places
+        meanValue = mean(data, row)
+        meanValue = round(meanValue, 4)
+        # Casts mean value to string
+        meanValue = str(meanValue)
+
+        # Finds minimum and maximum of each row
+        minimum, maximum = minAndMax(data, row)
+
+        # Finds standard deviation, rounds it, and casts it to string
+        standardDev = standardDeviation(data, row)
+        standardDev = round(standardDev, 4)
+        standardDev = str(standardDev)
+
+        # Minimum and maximum are casted to strings
+        minimum = str(minimum)
+        maximum = str(maximum)
+
+        # Generates a list based on median, mean, min, max, and standard deviation
+        singleRow = [median, meanValue, minimum, maximum, standardDev]
+        # Appended to a list of statistics
+        listOfStatistics.append(singleRow)
+    
+    # Plots a table using matplotlib
+    statTable = plt.table(listOfStatistics, loc=9, colLabels=['Median', 'Mean', 'Min', 'Max', 'Standard Dev'], rowLabels=columnNames)
+    statTable.auto_set_font_size(False)
+    statTable.set_fontsize(8)
+    statTable.scale(1, 1)
+    plt.axis('off')
+    plt.show()
