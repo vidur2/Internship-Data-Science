@@ -56,8 +56,8 @@ def frequencyDist(table, rowName, possibleValues):
     freqTable = plt.table(enterableFrequency, loc=9, colLabels=['Frequency'], rowLabels=list(possibleValues), cellLoc='center')
     freqTable.auto_set_font_size(False)
     freqTable.set_fontsize(8)
-    freqTable.scale(0.5, 1)
     plt.axis('off')
+    plt.figure(figsize=(0.25, 1), dpi=100)
     plt.show()
     # Returns Frequency Dictionary
     return freq

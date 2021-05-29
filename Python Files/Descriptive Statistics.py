@@ -5,7 +5,7 @@ Internship
 '''
 
 #Imports
-from Commands import * 
+from freqCommands import * 
 from DescriptiveAnalysisCommands import *
 from matplotlib import pyplot as plt
 

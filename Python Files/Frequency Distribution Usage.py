@@ -3,16 +3,16 @@ File that generates Frequency Distribution Table
 '''
 
 # Imports
-import Commands
+import freqCommands
 
 def main():
     # Reads in data from csv
-    data, isSuccess = Commands.readCSV('/Users/vidurmodgil/Desktop/DATA/Internship/Internship-Data/VIDURSAMPLE.csv')
-
+    data, isSuccess = freqCommands.readCSV('/Users/vidurmodgil/Desktop/DATA/Internship/Internship-Data/VIDURSAMPLE.csv')
+    print(list(data.keys()))
     # Generates set of unique data
-    uniqueDelqid = Commands.gatherSet(data, 'DELQID')
+    uniqueId = freqCommands.gatherSet(data, 'AGE')
     # Gets frequency and plots table
-    frequencyDict = Commands.frequencyDist(data, 'DELQID', uniqueDelqid)
+    frequencyDict = freqCommands.frequencyDist(data, 'AGE', uniqueId)
 
 if __name__ == '__main__':
     main()

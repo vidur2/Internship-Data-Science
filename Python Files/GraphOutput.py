@@ -6,7 +6,7 @@ Internship
 
 # Imports
 from matplotlib import pyplot as plt
-from Commands import *
+from freqCommands import *
 
 def plotHistogram(table, row, binNumber):
     dataSet = table[row]
