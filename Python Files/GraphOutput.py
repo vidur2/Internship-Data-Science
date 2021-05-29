@@ -8,9 +8,10 @@ Internship
 from matplotlib import pyplot as plt
 from Commands import *
 
-def plotHistogram(table, row):
+def plotHistogram(table, row, binNumber):
     dataSet = table[row]
-    plt.hist(dataSet, bins=30)
+    plt.hist(dataSet, bins=binNumber)
+
 def plotBarChart(table, row):
     dataSet = table[row]
     key = gatherSet(table, row)
@@ -35,7 +36,12 @@ def main():
             discreetKeys.append(key)
         else:
             continiousKeys.append(key)
-    plotBarChart(data,'AGE')
-    plt.show()
+    for key in continiousKeys:
+        plotHistogram(data, key, 30)
+        plt.show()
+    for key in discreetKeys:
+        plotBarChart(data, key)
+        plt.show()
+
 if __name__ == '__main__':
     main()
