@@ -12,8 +12,49 @@ data = pd.read_csv('/Users/vidurmodgil/Desktop/DATA/Internship/Internship-Data/V
 tradesDF = list(data['TRADES'].copy())
 tradesDataFrame = pd.DataFrame(data['TRADES'].copy())
 tradeList = data['TRADES'].tolist()
+ageList = data['AGE'].tolist()
+rbalList = data['RBAL'].tolist()
+
 n, tradeBins, patches = plt.hist(tradeList, equalObs(tradeList, 10), edgecolor='black')
+_, ageBins, _ = plt.hist(ageList, equalObs(ageList, 10), color='black')
+_, rbalBins,  _ = plt.hist(rbalList, equalObs(rbalList, 10), color='black')
+
 ordTrades = []
+rankedAge = []
+rankedRbal = []
+
+for i in rbalList:
+    hasAppended = False
+    for j in range(10):
+        if i < rbalBins[j + 1]:
+            rankedRbal.append(j + 1)
+            hasAppended = True
+            break
+    if hasAppended == False:
+        rankedRbal.append(10)
+
+for i in ageList:
+    if i < ageBins[1]:
+        rankedAge.append(1)
+    elif i < ageBins[2]:
+        rankedAge.append(2)
+    elif i < ageBins[3]:
+        rankedAge.append(3)
+    elif i < ageBins[4]:
+        rankedAge.append(4)
+    elif i < ageBins[5]:
+        rankedAge.append(5)
+    elif i < ageBins[6]:
+        rankedAge.append(6)
+    elif i < ageBins[7]:
+        rankedAge.append(7)
+    elif i < ageBins[8]:
+        rankedAge.append(8)
+    elif i < ageBins[9]:
+        rankedAge.append(9)
+    else:
+        rankedAge.append(10)
+    
 for i in tradesDF:
     if i < tradeBins[1]:
         x = 1
@@ -33,7 +74,6 @@ for i in tradesDF:
     elif i < tradeBins[6]:
         x = 6
         ordTrades.append(x)
-        print(x)
     elif i < tradeBins[7]:
         x = 7
         ordTrades.append(x)
@@ -46,7 +86,9 @@ for i in tradesDF:
     else:
         x = 10
         ordTrades.append(x)
+
+print(rankedRbal)
 data['RANKTRADE'] = ordTrades
-tradeSort = pd.DataFrame(data[['RANKTRADE', 'TRADES']].copy())
-tradeSort.sort_values(['RANKTRADE'], ascending=True, inplace=True)
-print(tradeSort)
+data['RANKEDAGE'] = rankedAge
+data['RANKEDRBAL'] = rankedRbal
+print(data)
