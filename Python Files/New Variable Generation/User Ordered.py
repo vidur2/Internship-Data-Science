@@ -69,23 +69,34 @@ def main():
             ordTrades.append(5)
 
     for i in age:
-        if i < 12:
+        if i < 25:
             ordAge.append(1)
-        elif i < 24:
+        elif i < 30:
             ordAge.append(2)
-        elif i < 36:
+        elif i < 35:
             ordAge.append(3)
-        elif i < 48:
+        elif i < 40:
             ordAge.append(4)
-        elif i < 60:
+        elif i < 45:
             ordAge.append(5)
-        else:
+        elif i < 50:
             ordAge.append(6)
+        elif i < 55:
+            ordAge.append(7)
+        elif i < 60:
+            ordAge.append(8)
+        elif i < 65:
+            ordAge.append(9)
+        elif i < 70:
+            ordAge.append(10)
+        else:
+            ordAge.append(11)
 
     data['ORDBRPCTSAT'] = ordBrpctsat
     data['ORDRBAL'] = ordRbal
     data['ORDTRADES'] = ordTrades
     data['ORDAGE'] = ordAge
-    print(data)
+    ageDescriptiveStats = data[["ORDBRPCTSAT", "goodbad"]].groupby("ORDBRPCTSAT").describe()
+    print(ageDescriptiveStats)
 if __name__ == '__main__':
     main()

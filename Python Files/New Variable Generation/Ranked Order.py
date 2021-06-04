@@ -14,14 +14,27 @@ tradesDataFrame = pd.DataFrame(data['TRADES'].copy())
 tradeList = data['TRADES'].tolist()
 ageList = data['AGE'].tolist()
 rbalList = data['RBAL'].tolist()
+brpctsatList = data['BRPCTSAT'].tolist()
 
 n, tradeBins, patches = plt.hist(tradeList, equalObs(tradeList, 10), edgecolor='black')
 _, ageBins, _ = plt.hist(ageList, equalObs(ageList, 10), color='black')
 _, rbalBins,  _ = plt.hist(rbalList, equalObs(rbalList, 10), color='black')
+_, brpctsatBins, _ = plt.hist(brpctsatList, equalObs(brpctsatList, 10), color='black')
 
 ordTrades = []
 rankedAge = []
 rankedRbal = []
+rankedBrpctsat = []
+
+for i in brpctsatList:
+    hasAppended = False
+    for j in range(10):
+        if i < brpctsatBins[j + 1]:
+            rankedBrpctsat.append(j + 1)
+            hasAppended = True
+            break
+    if hasAppended == False:
+        rankedBrpctsat.append(10)
 
 for i in rbalList:
     hasAppended = False
@@ -87,8 +100,14 @@ for i in tradesDF:
         x = 10
         ordTrades.append(x)
 
-print(rankedRbal)
+print(len(rankedBrpctsat))
+print(len(brpctsatList))
 data['RANKTRADE'] = ordTrades
 data['RANKEDAGE'] = rankedAge
 data['RANKEDRBAL'] = rankedRbal
-print(data)
+data['RANKEDBRPCTSAT'] = rankedBrpctsat
+
+RankDescriptiveStats = data[["RANKTRADE", "goodbad"]].groupby("RANKTRADE").describe()
+RankRbalStats = data[["RANKEDRBAL", "goodbad"]].groupby("RANKEDRBAL").describe()
+rankedBrpctsatStats = data[["RANKEDBRPCTSAT", "goodbad"]].groupby("RANKEDBRPCTSAT").describe()
+print(rankedBrpctsatStats)
