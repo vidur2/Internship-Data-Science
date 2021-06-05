@@ -218,8 +218,63 @@ def main():
     data['RANKEDAGE'] = rankedAge
     data['RANKEDBRPCTSAT'] = rankedBrpctsat
     data['RANKEDRBAL'] = rankedRbal
-
     print(data)
 
+    
+    # Runs descriptive statistics with the new variables vs their original counterparts
+
+    # Ordinal Variables
+    ordTradesDescriptiveStatistics = data[["ORDTRADES", "TRADES"]].groupby("ORDTRADES").describe()
+    ordAgeDescriptiveStatistics = data[["ORDAGE", "AGE"]].groupby("ORDAGE").describe()
+    ordBrpctsatDescriptiveStatistics = data[["ORDBRPCTSAT", "BRPCTSAT"]].groupby("ORDBRPCTSAT").describe()
+    ordRbalDescriptiveStatistics = data[["ORDRBAL", "RBAL"]].groupby("ORDRBAL").describe()
+
+    print('\n\nOrdinal Variables vs Original Counterparts: \n')
+    print(ordTradesDescriptiveStatistics)
+    print(ordAgeDescriptiveStatistics)
+    print(ordBrpctsatDescriptiveStatistics)
+    print(ordRbalDescriptiveStatistics)
+
+    # Computer-Ranked Variables
+    rankedTradesDescriptiveStatistics = data[["RANKEDTRADES", "TRADES"]].groupby("RANKEDTRADES").describe()
+    rankedAgeDescriptiveStatistics = data[["RANKEDAGE", "AGE"]].groupby("RANKEDAGE").describe()
+    rankedBrpctsatDescriptiveStatistics = data[["RANKEDBRPCTSAT", "BRPCTSAT"]].groupby("RANKEDBRPCTSAT").describe()
+    rankedRbalDescriptiveStatistics = data[["RANKEDRBAL", "RBAL"]].groupby("RANKEDRBAL").describe()
+    
+    print('\n\nRanked Variables vs Original Counterparts: \n')
+    print(rankedTradesDescriptiveStatistics)
+    print(rankedAgeDescriptiveStatistics)
+    print(rankedBrpctsatDescriptiveStatistics)
+    print(rankedRbalDescriptiveStatistics)
+
+    
+    # Runs Descriptive Statistics on the new variables vs goodbad to see p(default)
+
+    # Ordinal variables
+    ordTradesDescriptiveStatistics = data[["ORDTRADES", "goodbad"]].groupby("ORDTRADES").describe()
+    ordAgeDescriptiveStatistics = data[["ORDAGE", "goodbad"]].groupby("ORDAGE").describe()
+    ordBrpctsatDescriptiveStatistics = data[["ORDBRPCTSAT", "goodbad"]].groupby("ORDBRPCTSAT").describe()
+    ordRbalDescriptiveStatistics = data[["ORDRBAL", "goodbad"]].groupby("ORDRBAL").describe()
+
+    print('\n\nOrdinal Variables vs goodbad: \n')
+    print(ordTradesDescriptiveStatistics)
+    print(ordAgeDescriptiveStatistics)
+    print(ordBrpctsatDescriptiveStatistics)
+    print(ordRbalDescriptiveStatistics)
+
+    # Computer-Ranked Variables
+    rankedTradesDescriptiveStatistics = data[["RANKEDTRADES", "goodbad"]].groupby("RANKEDTRADES").describe()
+    rankedAgeDescriptiveStatistics = data[["RANKEDAGE", "goodbad"]].groupby("RANKEDAGE").describe()
+    rankedBrpctsatDescriptiveStatistics = data[["RANKEDBRPCTSAT", "goodbad"]].groupby("RANKEDBRPCTSAT").describe()
+    rankedRbalDescriptiveStatistics = data[["RANKEDRBAL", "goodbad"]].groupby("RANKEDRBAL").describe()
+    
+    print('\n\nRanked Variables vs goodbad: \n')
+    print(rankedTradesDescriptiveStatistics)
+    print(rankedAgeDescriptiveStatistics)
+    print(rankedBrpctsatDescriptiveStatistics)
+    print(rankedRbalDescriptiveStatistics)
+
+
+    
 if __name__ == '__main__':
     main()

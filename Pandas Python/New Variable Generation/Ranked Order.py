@@ -107,7 +107,7 @@ data['RANKEDAGE'] = rankedAge
 data['RANKEDRBAL'] = rankedRbal
 data['RANKEDBRPCTSAT'] = rankedBrpctsat
 
-RankDescriptiveStats = data[["RANKTRADE", "goodbad"]].groupby("RANKTRADE").describe()
+rankTradeDescriptiveStats = data[["RANKTRADE", "goodbad"]].groupby("RANKTRADE").describe()
 RankRbalStats = data[["RANKEDRBAL", "goodbad"]].groupby("RANKEDRBAL").describe()
 rankedBrpctsatStats = data[["RANKEDBRPCTSAT", "goodbad"]].groupby("RANKEDBRPCTSAT").describe()
 print(rankedBrpctsatStats)
