@@ -10,6 +10,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import random
 from sklearn.linear_model import LogisticRegression
+from sklearn import metrics
 
 def equalObs(x, nbin):
     nlen = len(x)
@@ -31,33 +32,33 @@ def main():
 
     
     # Histograms of all variables
-    data['TRADES'].hist(bins=12)
-    plt.title('Trades')
-    #plt.show()
+    # data['TRADES'].hist(bins=12)
+    # plt.title('Trades')
+    # #plt.show()
 
-    data['AGE'].hist(bins=10)
-    plt.title('Age')
-    #plt.show()
+    # data['AGE'].hist(bins=10)
+    # plt.title('Age')
+    # #plt.show()
 
-    data['DELQID'].hist(bins=8)
-    plt.title('Delqid')
-    #plt.show()
+    # data['DELQID'].hist(bins=8)
+    # plt.title('Delqid')
+    # #plt.show()
 
-    data['goodbad'].hist(bins=2)
-    plt.title('goodbad')
-    #plt.show()
+    # data['goodbad'].hist(bins=2)
+    # plt.title('goodbad')
+    # #plt.show()
 
-    data['BRPCTSAT'].hist(bins=10)
-    plt.title('Bank Revolving Payment Percent Satisfied')
-    #plt.show()
+    # data['BRPCTSAT'].hist(bins=10)
+    # plt.title('Bank Revolving Payment Percent Satisfied')
+    # #plt.show()
 
-    data['RBAL'].hist(bins=6)
-    plt.title('Revolving Balance')
-    #plt.show()
+    # data['RBAL'].hist(bins=6)
+    # plt.title('Revolving Balance')
+    # #plt.show()
 
-    data['CRELIM'].hist(bins=6)
-    plt.title('Credit Limit')
-    #plt.show()
+    # data['CRELIM'].hist(bins=6)
+    # plt.title('Credit Limit')
+    # #plt.show()
 
     
     
@@ -167,6 +168,52 @@ def main():
     print(testData['TRADES'].describe())
     print(modelData['AGE'].describe())
     print(testData['AGE'].describe())
-
+    print(data)
+    # Actual model building
+    # Raw Data
+    usableModelDataX = modelData[['TRADES', 'AGE', 'RBAL', 'BRPCTSAT']].copy()
+    usableModelDataY = modelData['goodbad'].copy()
+    logisticReg = LogisticRegression()
+    logisticReg.fit(usableModelDataX, usableModelDataY)
+    predictionProbablity = list(logisticReg.predict_proba(usableModelDataX))
+    finalPredictions_RAW = []
+    for prediction in predictionProbablity:
+        finalPredictions_RAW.append(prediction[1])
+    modelData['Prediction Probability_RAW'] = finalPredictions_RAW
+    modelCoeff = list(logisticReg.coef_)
+    modelInt = list(logisticReg.intercept_)
+    rawModel = list(modelCoeff[0])
+    rawModel.append(modelInt[0])
+    print(rawModel)
+    metrics.plot_roc_curve(logisticReg, usableModelDataX, usableModelDataY)
+    plt.show()
+    # Ordinal Data
+    usableModelDataX = modelData[['ORDTRADES', 'ORDAGE', 'ORDRBAL', 'ORDBRPCTSAT']]
+    logisticRegOrd = LogisticRegression()
+    logisticRegOrd.fit(usableModelDataX, usableModelDataY)
+    ordPrecitionProbability = list(logisticRegOrd.predict_proba(usableModelDataX))
+    ordModelCoeff = list(logisticRegOrd.coef_)
+    ordModelInt = list(logisticRegOrd.intercept_)
+    ordModel = list(ordModelCoeff[0])
+    ordModel.append(ordModelInt)
+    print(ordModel)
+    modelData['Prediction Prob_ORD'] = ordPrecitionProbability
+    metrics.plot_roc_curve(logisticRegOrd, usableModelDataX, usableModelDataY)
+    plt.show()
+    # Rank Data
+    usableModelDataX = modelData[['RANKEDTRADES', 'RANKEDAGE', 'RANKEDRBAL', 'RANKEDBRPCTSAT']]
+    logisticRegRanked = LogisticRegression()
+    logisticRegRanked.fit(usableModelDataX, usableModelDataY)
+    rankedPredictionProbability = list(logisticRegRanked.predict_proba(usableModelDataX))
+    rankedModelCoeff = list(logisticRegRanked.coef_)
+    rankedModelInt = list(logisticRegRanked.intercept_)
+    rankedModel = list(rankedModelCoeff[0])
+    rankedModel.append(rankedModelInt[0])
+    modelData['Prediction Prob_RANK'] = rankedPredictionProbability
+    metrics.plot_roc_curve(logisticRegRanked, usableModelDataX, usableModelDataY)
+    plt.show()
+    print([rawModel, ordModel, rankedModel])
+    predictionModels = pd.DataFrame(data=[rawModel, ordModel, rankedModel], index=['Raw', 'Ordinal', 'Ranked'], columns=['Trades', 'Age', 'BRPCTSAT', 'RBAL', 'Intercept'])
+    print(predictionModels)
 if __name__ == '__main__':
     main()

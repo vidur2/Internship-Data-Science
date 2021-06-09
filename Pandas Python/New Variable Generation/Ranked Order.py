@@ -110,4 +110,10 @@ data['RANKEDBRPCTSAT'] = rankedBrpctsat
 rankTradeDescriptiveStats = data[["RANKTRADE", "goodbad"]].groupby("RANKTRADE").describe()
 RankRbalStats = data[["RANKEDRBAL", "goodbad"]].groupby("RANKEDRBAL").describe()
 rankedBrpctsatStats = data[["RANKEDBRPCTSAT", "goodbad"]].groupby("RANKEDBRPCTSAT").describe()
+
+rankedBrpctsatStats = pd.DataFrame(data[["RANKEDBRPCTSAT", "goodbad"]].groupby("RANKEDBRPCTSAT").mean())
+rankedBrpctsatStats['RANKEDBRPCTSAT_1'] = rankedBrpctsatStats.index
+print(rankedBrpctsatStats)
+rankedBrpctsatStats.plot.scatter(x='Prediction_1', y="goodbad")
+plt.show()
 print(rankedBrpctsatStats)
