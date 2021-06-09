@@ -8,6 +8,8 @@ Internship
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+import random
+from sklearn.linear_model import LogisticRegression
 
 def equalObs(x, nbin):
     nlen = len(x)
@@ -31,31 +33,31 @@ def main():
     # Histograms of all variables
     data['TRADES'].hist(bins=12)
     plt.title('Trades')
-    plt.show()
+    #plt.show()
 
     data['AGE'].hist(bins=10)
     plt.title('Age')
-    plt.show()
+    #plt.show()
 
     data['DELQID'].hist(bins=8)
     plt.title('Delqid')
-    plt.show()
+    #plt.show()
 
     data['goodbad'].hist(bins=2)
     plt.title('goodbad')
-    plt.show()
+    #plt.show()
 
     data['BRPCTSAT'].hist(bins=10)
     plt.title('Bank Revolving Payment Percent Satisfied')
-    plt.show()
+    #plt.show()
 
     data['RBAL'].hist(bins=6)
     plt.title('Revolving Balance')
-    plt.show()
+    #plt.show()
 
     data['CRELIM'].hist(bins=6)
     plt.title('Credit Limit')
-    plt.show()
+    #plt.show()
 
     
     
@@ -150,6 +152,21 @@ def main():
     print(rankedAgeDescriptiveStatistics)
     print(rankedBrpctsatDescriptiveStatistics)
     print(rankedRbalDescriptiveStatistics)
+
+    # Splitting the file randomly
+    random.seed(123456)
+    randomNumbers = []
+    for _ in range(100_000):
+        randomNumber = random.random()
+        randomNumbers.append(randomNumber)
+    data['Shuffle Assignment'] = randomNumbers
+    data.sort_values('Shuffle Assignment', ascending=True, inplace=True, ignore_index = True)
+    modelData = data[0:80_000].copy()
+    testData = data[80_001:99_999].copy()
+    print(modelData['TRADES'].describe())
+    print(testData['TRADES'].describe())
+    print(modelData['AGE'].describe())
+    print(testData['AGE'].describe())
 
 if __name__ == '__main__':
     main()
