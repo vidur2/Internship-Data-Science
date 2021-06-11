@@ -32,33 +32,33 @@ def main():
 
     
     # Histograms of all variables
-    # data['TRADES'].hist(bins=12)
-    # plt.title('Trades')
-    # #plt.show()
+    data['TRADES'].hist(bins=12)
+    plt.title('Trades')
+    plt.show()
 
-    # data['AGE'].hist(bins=10)
-    # plt.title('Age')
-    # #plt.show()
+    data['AGE'].hist(bins=10)
+    plt.title('Age')
+    plt.show()
 
-    # data['DELQID'].hist(bins=8)
-    # plt.title('Delqid')
-    # #plt.show()
+    data['DELQID'].hist(bins=8)
+    plt.title('Delqid')
+    plt.show()
 
-    # data['goodbad'].hist(bins=2)
-    # plt.title('goodbad')
-    # #plt.show()
+    data['goodbad'].hist(bins=2)
+    plt.title('goodbad')
+    plt.show()
 
-    # data['BRPCTSAT'].hist(bins=10)
-    # plt.title('Bank Revolving Payment Percent Satisfied')
-    # #plt.show()
+    data['BRPCTSAT'].hist(bins=10)
+    plt.title('Bank Revolving Payment Percent Satisfied')
+    plt.show()
 
-    # data['RBAL'].hist(bins=6)
-    # plt.title('Revolving Balance')
-    # #plt.show()
+    data['RBAL'].hist(bins=6)
+    plt.title('Revolving Balance')
+    plt.show()
 
-    # data['CRELIM'].hist(bins=6)
-    # plt.title('Credit Limit')
-    # #plt.show()
+    data['CRELIM'].hist(bins=6)
+    plt.title('Credit Limit')
+    plt.show()
 
     
     
@@ -215,5 +215,17 @@ def main():
     print([rawModel, ordModel, rankedModel])
     predictionModels = pd.DataFrame(data=[rawModel, ordModel, rankedModel], index=['Raw', 'Ordinal', 'Ranked'], columns=['Trades', 'Age', 'BRPCTSAT', 'RBAL', 'Intercept'])
     print(predictionModels)
+
+    # Testing the model
+    testDataInd = testData[['ORDAGE', 'ORDTRADES', 'ORDRBAL', 'ORDBRPCTSAT']]
+    predictionVariable = list(logisticRegOrd.predict_proba(testDataInd))
+    predictionVariableSingular = []
+    for element in predictionVariable:
+        predictionVariableSingular.append(element[1])
+    testData['Prediction Variable'] = predictionVariableSingular
+    predictionVerification = testData[["goodbad", "Prediction Variable"]].groupby("goodbad").describe()
+    print(testData)
+    print(predictionVerification)
+
 if __name__ == '__main__':
     main()
