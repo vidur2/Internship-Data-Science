@@ -169,49 +169,64 @@ def main():
     print(modelData['AGE'].describe())
     print(testData['AGE'].describe())
     print(data)
+    
     # Actual model building
     # Raw Data
     usableModelDataX = modelData[['TRADES', 'AGE', 'RBAL', 'BRPCTSAT']].copy()
     usableModelDataY = modelData['goodbad'].copy()
+    
     logisticReg = LogisticRegression()
     logisticReg.fit(usableModelDataX, usableModelDataY)
     predictionProbablity = list(logisticReg.predict_proba(usableModelDataX))
+    
     finalPredictions_RAW = []
     for prediction in predictionProbablity:
         finalPredictions_RAW.append(prediction[1])
+    
     modelData['Prediction Probability_RAW'] = finalPredictions_RAW
     modelCoeff = list(logisticReg.coef_)
     modelInt = list(logisticReg.intercept_)
     rawModel = list(modelCoeff[0])
+    
     rawModel.append(modelInt[0])
     print(rawModel)
+    
     metrics.plot_roc_curve(logisticReg, usableModelDataX, usableModelDataY)
     plt.show()
+    
     # Ordinal Data
     usableModelDataX = modelData[['ORDTRADES', 'ORDAGE', 'ORDRBAL', 'ORDBRPCTSAT']]
+    
     logisticRegOrd = LogisticRegression()
     logisticRegOrd.fit(usableModelDataX, usableModelDataY)
+    
     ordPrecitionProbability = list(logisticRegOrd.predict_proba(usableModelDataX))
     ordModelCoeff = list(logisticRegOrd.coef_)
     ordModelInt = list(logisticRegOrd.intercept_)
     ordModel = list(ordModelCoeff[0])
+    
     ordModel.append(ordModelInt)
     print(ordModel)
+    
     modelData['Prediction Prob_ORD'] = ordPrecitionProbability
     metrics.plot_roc_curve(logisticRegOrd, usableModelDataX, usableModelDataY)
     plt.show()
     # Rank Data
     usableModelDataX = modelData[['RANKEDTRADES', 'RANKEDAGE', 'RANKEDRBAL', 'RANKEDBRPCTSAT']]
+    
     logisticRegRanked = LogisticRegression()
     logisticRegRanked.fit(usableModelDataX, usableModelDataY)
     rankedPredictionProbability = list(logisticRegRanked.predict_proba(usableModelDataX))
+    
     rankedModelCoeff = list(logisticRegRanked.coef_)
     rankedModelInt = list(logisticRegRanked.intercept_)
     rankedModel = list(rankedModelCoeff[0])
+    
     rankedModel.append(rankedModelInt[0])
     modelData['Prediction Prob_RANK'] = rankedPredictionProbability
     metrics.plot_roc_curve(logisticRegRanked, usableModelDataX, usableModelDataY)
     plt.show()
+    
     print([rawModel, ordModel, rankedModel])
     predictionModels = pd.DataFrame(data=[rawModel, ordModel, rankedModel], index=['Raw', 'Ordinal', 'Ranked'], columns=['Trades', 'Age', 'BRPCTSAT', 'RBAL', 'Intercept'])
     print(predictionModels)
@@ -226,6 +241,33 @@ def main():
     predictionVerification = testData[["goodbad", "Prediction Variable"]].groupby("goodbad").describe()
     print(testData)
     print(predictionVerification)
+
+    # Optimization of cutoff points
+    cutoffPoints = (0.2, 0.25, 0.3, 0.35, 0.4)
+    predictionVariable = list(testData['Prediction Variable'])
+    possibleProfits = []
+    for point in cutoffPoints:
+        profits = 0
+        testDataPredictedGoodBad = []
+        for element in predictionVariable:
+            if element < point:
+                testDataPredictedGoodBad.append(0)
+            else:
+                testDataPredictedGoodBad.append(1)
+        title = 'Prediction Variable cutoff point ' + str(point)
+        testData[title] = testDataPredictedGoodBad
+        groupedTest = testData.groupby(title)
+        intendedGroup = groupedTest.get_group(0)
+        for index, row in intendedGroup.iterrows():
+            if row['goodbad'] == 0:
+                profits = profits + 500
+            else:
+                profits = profits - (0.5 * row['CRELIM'])
+        possibleProfits.append(profits/len(predictionVariable))
+        
+    maxProfits = max(possibleProfits)
+    maxProfitsIndex = possibleProfits.index(maxProfits)
+    print(f'The optimal cutoff point is {cutoffPoints[maxProfitsIndex]}, with a profit per account value of {maxProfits}')
 
 if __name__ == '__main__':
     main()
