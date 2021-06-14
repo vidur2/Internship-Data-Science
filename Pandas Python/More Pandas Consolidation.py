@@ -168,7 +168,6 @@ def main():
     print(testData['TRADES'].describe())
     print(modelData['AGE'].describe())
     print(testData['AGE'].describe())
-    print(data)
     
     # Actual model building
     # Raw Data
@@ -211,6 +210,7 @@ def main():
     modelData['Prediction Prob_ORD'] = ordPrecitionProbability
     metrics.plot_roc_curve(logisticRegOrd, usableModelDataX, usableModelDataY)
     plt.show()
+    
     # Rank Data
     usableModelDataX = modelData[['RANKEDTRADES', 'RANKEDAGE', 'RANKEDRBAL', 'RANKEDBRPCTSAT']]
     
@@ -242,6 +242,7 @@ def main():
     print(testData)
     print(predictionVerification)
 
+    
     # Optimization of cutoff points
     cutoffPoints = (0.2, 0.25, 0.3, 0.35, 0.4)
     predictionVariable = list(testData['Prediction Variable'])
@@ -268,6 +269,8 @@ def main():
     maxProfits = max(possibleProfits)
     maxProfitsIndex = possibleProfits.index(maxProfits)
     print(f'The optimal cutoff point is {cutoffPoints[maxProfitsIndex]}, with a profit per account value of {maxProfits}')
+    plt.plot(cutoffPoints, possibleProfits)
+    plt.show()
 
 if __name__ == '__main__':
     main()
