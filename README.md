@@ -34,7 +34,7 @@ In order to avoid any biases that may have been present during the collection, o
 #### Logistic Regression Using sklearn
 The current model is built using a package called sklearn. The Logistic Regression function was used to fit the data, due to the output needing to be 0/1. This is because of the shape of a logistic curve: There are two limits. In our case, the upper limit is the 1, or defualt case, and the lower limit is 0. The first output is the probability of default.
 
-![300px-Logistic-curve svg](https://user-images.githubusercontent.com/55110959/123127808-9cce4700-d418-11eb-9aeb-ce4e5662151c.png)
+<img src="https://user-images.githubusercontent.com/55110959/123127808-9cce4700-d418-11eb-9aeb-ce4e5662151c.png" width=300></img>
 
 #### Cutoff Points
 
