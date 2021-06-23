@@ -30,3 +30,12 @@ After the plotting of the data, the four variables are put into 'bins', or categ
 To generate and test predictions, we need two different datasets: one to train the data, and one to test it. In order to get these two datasets, we need to split the data into train and test categories.
 
 In order to avoid any biases that may have been present during the collection, or our analysis of the data, the file needs to be randomly split into these two sets. The file is split this way 80/20, the 80% being the training data.
+
+#### Logistic Regression Using sklearn
+The current model is built using a package called sklearn. The Logistic Regression function was used to fit the data, due to the output needing to be 0/1. This is because of the shape of a logistic curve: There are two limits. In our case, the upper limit is the 1, or defualt case, and the lower limit is 0. The first output is the probability of default.
+
+![300px-Logistic-curve svg](https://user-images.githubusercontent.com/55110959/123127808-9cce4700-d418-11eb-9aeb-ce4e5662151c.png)
+
+#### Cutoff Points
+
+
