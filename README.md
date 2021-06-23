@@ -37,5 +37,5 @@ The current model is built using a package called sklearn. The Logistic Regressi
 <img src="https://user-images.githubusercontent.com/55110959/123127808-9cce4700-d418-11eb-9aeb-ce4e5662151c.png" width=300></img>
 
 #### Cutoff Points
-
+The final part of the code deals with finding the cutoff points and generating the Profit Per customer. The cutoff points basically decide which is a 0(gets credit) and which is a 1(does not get credit) based on the Probability of default calculated in the last section. The profit from a given customer is calculated using the formula: (Number of Predicted Non Defaulters who did not Default) * 500 - (Number of Predicted Non Defaulters who did Default) *  0.5 * Credit Line Amount. The optimal cutoff point found is at a 30% probabilty of default.
 
