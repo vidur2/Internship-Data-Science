@@ -270,6 +270,7 @@ def main():
     maxProfitsIndex = possibleProfits.index(maxProfits)
     print(f'The optimal cutoff point is {cutoffPoints[maxProfitsIndex]}, with a profit per account value of {maxProfits}')
     plt.plot(cutoffPoints, possibleProfits)
+    plt.title('Cuttoff Point Optimization')
     plt.show()
 
 if __name__ == '__main__':
