@@ -6,3 +6,4 @@ The purpose of the code as a whole is to take consumer credit data and generate 
 There are two different versions of the productionalized code, the client code and the data scientist code.
 There READMEs can be found here:
 1. [Data Science README.md](OverviewForDataScientists.md)
+2. [Client README.md](ClientOverview.md)
