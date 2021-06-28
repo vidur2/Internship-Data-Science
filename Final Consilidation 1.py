@@ -1,10 +1,10 @@
 '''
-This is the Run File for the 'Data Sciencist' Version of the code
+This is the Run File for the 'Data Scientist' Version of the code
 Vidur Modgil
 Internship
 '''
 
-# Imports
+# Here we are importing all of the required packages
 import numpy as np
 import pandas as pd
 import os
@@ -77,6 +77,7 @@ def main():
     testData = data[80_001:99_999].copy()
 
     # The binned(ordinal) variables are then used to generate a logistic regression model
+    # Note that good bad is the dependent variable
     usableModelDataX = modelData[['ORDTRADES', 'ORDAGE', 'ORDRBAL', 'ORDBRPCTSAT']]
     usableModelDataY = modelData['goodbad'].copy()
     
@@ -103,7 +104,7 @@ def main():
     print(predictionModels)
     print('\n')
 
-    # Testing the model on the 20,000 datapoints not used to generate the data
+    # Testing the model on the 20,000 datapoints not used to generate the model
     testDataInd = testData[['ORDAGE', 'ORDTRADES', 'ORDRBAL', 'ORDBRPCTSAT']]
     predictionVariable = list(logisticRegOrd.predict_proba(testDataInd))
     predictionVariableSingular = []
