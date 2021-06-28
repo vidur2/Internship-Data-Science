@@ -20,9 +20,17 @@ def equalObs(x, nbin):
                      np.sort(x))
 
 def main():
-    # Reads in the csv
-    data = pd.read_csv('/Users/vidurmodgil/Desktop/DATA/Internship/Internship-Data/VIDURSAMPLE.csv') # Enter your filepath for the data here
+    # Reads in the CSVs
+    predictionData = pd.read_csv('/Users/vidurmodgil/Desktop/DATA/Internship/CPR.csv') # Enter your filepath for the prediction data here
+    outputData = pd.read_csv('/Users/vidurmodgil/Desktop/DATA/Internship/PERF.csv') # Enter your filepath for the output data here
+
+    predictionData = predictionData.set_index('MATCHKEY')
+    outputData = outputData.set_index('MATCHKEY')
+
+    combinedData = pd.concat([predictionData, outputData])
     
+    data = combinedData[['TRADES', 'AGE', 'RBAL', 'BRPCTSAT', 'CRELIM', 'DELQID', 'goodbad']].copy()
+
     # Generate and output file layout using pandas
     fileLayout = data.info()
     print(fileLayout)
@@ -79,23 +87,6 @@ def main():
     data['ORDBRPCTSAT'] = pd.cut(data['BRPCTSAT'], ordBrpctsatBin, labels=ordBrpctsatLabels, retbins=False, precision=0)
     data['ORDRBAL'] = pd.cut(data['RBAL'], ordRbalBin, labels= ordRbalLabels, retbins= False, precision=0)
 
-    # Computer Generated Variable adding with pandas(Ranked Variables)
-    labels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    reLabel = [1, 2, 3, 4, 5, 6, 7, 8]
-    _, brpctsatBins, _ = plt.hist(list(data['BRPCTSAT']), equalObs(list(data['BRPCTSAT']), 10), color='black')
-    brpctsatBins = list(brpctsatBins)
-    for i in range(2):
-        brpctsatBins.remove(1)
-    brpctsatBins[0] = -0.1
-    
-    _, rankedBrpctsatBins, _ = plt.hist(list(data['BRPCTSAT']), equalObs(list(data['BRPCTSAT']), 8), color='black')
-    data['RANKEDTRADES'] = pd.qcut(data['TRADES'], q=10, retbins=False, labels=labels, precision=0)
-    data['RANKEDAGE'] = pd.qcut(data['AGE'], q=10, retbins=False, labels=labels, precision=0)
-    data['RANKEDBRPCTSAT'] = pd.cut(data['BRPCTSAT'], brpctsatBins, labels=reLabel, retbins=False, precision=0)
-    data['RANKEDRBAL'] = pd.qcut(data['RBAL'], q=10, retbins=False, labels=labels, precision=0, duplicates='drop')
-    print(data)
-
-
     # Runs descriptive statistics with the new variables vs their original counterparts
 
     # Ordinal Variables
@@ -109,19 +100,6 @@ def main():
     print(ordAgeDescriptiveStatistics)
     print(ordBrpctsatDescriptiveStatistics)
     print(ordRbalDescriptiveStatistics)
-
-    # Computer-Ranked Variables
-    rankedTradesDescriptiveStatistics = data[["RANKEDTRADES", "TRADES"]].groupby("RANKEDTRADES").describe()
-    rankedAgeDescriptiveStatistics = data[["RANKEDAGE", "AGE"]].groupby("RANKEDAGE").describe()
-    rankedBrpctsatDescriptiveStatistics = data[["RANKEDBRPCTSAT", "BRPCTSAT"]].groupby("RANKEDBRPCTSAT").describe()
-    rankedRbalDescriptiveStatistics = data[["RANKEDRBAL", "RBAL"]].groupby("RANKEDRBAL").describe()
-    
-    print('\n\nRanked Variables vs Original Counterparts: \n')
-    print(rankedTradesDescriptiveStatistics)
-    print(rankedAgeDescriptiveStatistics)
-    print(rankedBrpctsatDescriptiveStatistics)
-    print(rankedRbalDescriptiveStatistics)
-
     
     # Runs Descriptive Statistics on the new variables vs goodbad to see p(default)
 
@@ -137,18 +115,6 @@ def main():
     print(ordBrpctsatDescriptiveStatistics)
     print(ordRbalDescriptiveStatistics)
 
-    # Computer-Ranked Variables
-    rankedTradesDescriptiveStatistics = data[["RANKEDTRADES", "goodbad"]].groupby("RANKEDTRADES").describe()
-    rankedAgeDescriptiveStatistics = data[["RANKEDAGE", "goodbad"]].groupby("RANKEDAGE").describe()
-    rankedBrpctsatDescriptiveStatistics = data[["RANKEDBRPCTSAT", "goodbad"]].groupby("RANKEDBRPCTSAT").describe()
-    rankedRbalDescriptiveStatistics = data[["RANKEDRBAL", "goodbad"]].groupby("RANKEDRBAL").describe()
-    
-    print('\n\nRanked Variables vs goodbad: \n')
-    print(rankedTradesDescriptiveStatistics)
-    print(rankedAgeDescriptiveStatistics)
-    print(rankedBrpctsatDescriptiveStatistics)
-    print(rankedRbalDescriptiveStatistics)
-
     # Splitting the file randomly
     random.seed(123456)
     randomNumbers = []
@@ -159,37 +125,12 @@ def main():
     data.sort_values('Shuffle Assignment', ascending=True, inplace=True, ignore_index = True)
     modelData = data[0:80_000].copy()
     testData = data[80_001:99_999].copy()
-    print(modelData['TRADES'].describe())
-    print(testData['TRADES'].describe())
-    print(modelData['AGE'].describe())
-    print(testData['AGE'].describe())
     
     # Actual model building
-    # Raw Data
-    usableModelDataX = modelData[['TRADES', 'AGE', 'RBAL', 'BRPCTSAT']].copy()
-    usableModelDataY = modelData['goodbad'].copy()
-    
-    logisticReg = LogisticRegression()
-    logisticReg.fit(usableModelDataX, usableModelDataY)
-    predictionProbablity = list(logisticReg.predict_proba(usableModelDataX))
-    
-    finalPredictions_RAW = []
-    for prediction in predictionProbablity:
-        finalPredictions_RAW.append(prediction[1])
-    
-    modelData['Prediction Probability_RAW'] = finalPredictions_RAW
-    modelCoeff = list(logisticReg.coef_)
-    modelInt = list(logisticReg.intercept_)
-    rawModel = list(modelCoeff[0])
-    
-    rawModel.append(modelInt[0])
-    print(rawModel)
-    
-    metrics.plot_roc_curve(logisticReg, usableModelDataX, usableModelDataY)
-    plt.show()
     
     # Ordinal Data
     usableModelDataX = modelData[['ORDTRADES', 'ORDAGE', 'ORDRBAL', 'ORDBRPCTSAT']]
+    usableModelDataY = modelData['goodbad']
     
     logisticRegOrd = LogisticRegression()
     logisticRegOrd.fit(usableModelDataX, usableModelDataY)
@@ -204,22 +145,6 @@ def main():
     
     modelData['Prediction Prob_ORD'] = ordPrecitionProbability
     metrics.plot_roc_curve(logisticRegOrd, usableModelDataX, usableModelDataY)
-    plt.show()
-    
-    # Rank Data
-    usableModelDataX = modelData[['RANKEDTRADES', 'RANKEDAGE', 'RANKEDRBAL', 'RANKEDBRPCTSAT']]
-    
-    logisticRegRanked = LogisticRegression()
-    logisticRegRanked.fit(usableModelDataX, usableModelDataY)
-    rankedPredictionProbability = list(logisticRegRanked.predict_proba(usableModelDataX))
-    
-    rankedModelCoeff = list(logisticRegRanked.coef_)
-    rankedModelInt = list(logisticRegRanked.intercept_)
-    rankedModel = list(rankedModelCoeff[0])
-    
-    rankedModel.append(rankedModelInt[0])
-    modelData['Prediction Prob_RANK'] = rankedPredictionProbability
-    metrics.plot_roc_curve(logisticRegRanked, usableModelDataX, usableModelDataY)
     plt.show()
     
     predictionModels = pd.DataFrame(data=[ordModel], index=['Ordinal'], columns=['Trades', 'Age', 'BRPCTSAT', 'RBAL', 'Intercept'])
@@ -261,7 +186,7 @@ def main():
             else:
                 profits = profits - (0.5 * row['CRELIM'])
         possibleProfits.append(profits/len(predictionVariable))
-        
+    
     maxProfits = max(possibleProfits)
     maxProfitsIndex = possibleProfits.index(maxProfits)
     print(f'The optimal cutoff point is {cutoffPoints[maxProfitsIndex]}, with a profit per account value of {maxProfits}')
