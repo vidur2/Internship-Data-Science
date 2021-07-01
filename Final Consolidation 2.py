@@ -12,9 +12,16 @@ def main():
     # This is the model function which takes input and predicts(think f(x) = mx + b, where x is the input variable)
     logisticModel = lambda trades, age, brpctsat, rbal: 1 - (math.e ** (0.7736147308484715 - (0.177008 * trades) - (0.061682 * age) + (0.175941 * brpctsat) - (0.292972 * rbal)))/(1 + math.e ** (0.7736147308484715 - (0.177008 * trades) - (0.061682 * age) + (0.175941 * brpctsat) - (0.292972 * rbal)))
 
-    # Asks the user for the location of their prediction file
+    # Foolproofing the input
+    notFilepath = False
     csvPath = input('Enter the location of your input file here(supported file is .csv): ')
-    data = pd.read_csv(csvPath)
+    # Asks the user for the location of their prediction file
+    while notFilepath == False:
+        try:
+            data = pd.read_csv(csvPath)
+            notFilepath = True
+        except:
+            csvPath = input('Please reenter your filepath, there was an error: ')
 
     # This part of the code sorts the data by their numeric input(sorts by range value)
     ordTradesLabels = [1, 2, 3, 4, 5]
@@ -60,8 +67,14 @@ def main():
     groupedData = data.groupby('Prediction Outcome')
     print(data)
     outputStore = input('Where would you like to store your output(Enter filepath)? ')
+    notFilepath = False
     data.set_index('MATCHKEY')
-    data.to_csv(outputStore)
+    while notFilepath == False:
+        try:
+            data.to_csv(outputStore)
+            notFilepath = True
+        except:
+            outputStore = input('Where would you like to store your output(Enter filepath), invalid input: ')
     
 
 if __name__ == '__main__':
